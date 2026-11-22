@@ -2,7 +2,7 @@
 # Tham so : $a0 = n    Tra ve : $v0 = F(n)
 # Thanh ghi: $t0-$t3 (thu tuc la)
 .data
- n: .word 20 
+ n: .word 20   
 .text
 main: 
   lw $a0,n  
@@ -15,23 +15,25 @@ main:
   syscall
   
 fib_rec:
-  slti $t0, $a0, 2 
-  bne $t0, $zero, fib_base
-  addi $sp, $sp, -16
-  sw $ra, 12($sp)
-  sw $a0, 8($sp)
+  addi  $sp, $sp, -16
+  sw    $ra, 12($sp)
+  sw    $a0, 8($sp)
+  slti  $t0, $a0, 2
+  bne   $t0, $zero, fib_base
   addiu $a0, $a0, -1
-  jal fib_rec 
-  sw $v0, 4($sp)
-  lw $a0, 8($sp)
+  jal   fib_rec
+  sw    $v0, 4($sp)
+  lw    $a0, 8($sp)
   addiu $a0, $a0, -2
-  jal fib_rec
-  lw $t1, 4($sp)
-  addu $v0, $t1, $v0
-  lw $ra, 12($sp)
-  addiu $sp, $sp, 16
-  jr $ra
+  jal   fib_rec
+  lw    $t1, 4($sp)
+  addu  $v0, $t1, $v0
+  j     fib_end
+
 fib_base:
-  move $v0, $a0
-  jr $ra
+  move  $v0, $a0
+fib_end:
+  lw    $ra, 12($sp)
+  addiu $sp, $sp, 16
+  jr    $ra
   
